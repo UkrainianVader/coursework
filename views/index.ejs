@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Облік</title>
+</head>
+<body>
+
+    <h1>Список обладнання</h1>
+
+    <table border="1"> <thead>
+            <tr>
+                <th>Назва</th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% items.forEach(function(item) { %>
+                <tr>
+                    <td><%= item.test_column1 %></td>
+                    <td><%= item.test_column2 %></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+</body>
+</html>
