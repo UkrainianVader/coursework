@@ -9,15 +9,23 @@
 
     <table border="1"> <thead>
             <tr>
+                <th>ID</th>
                 <th>Назва</th>
+                <th>Тип</th>
+                <th>Серійний номер</th>
                 <th>Статус</th>
+                <th>Опис</th>
             </tr>
         </thead>
         <tbody>
             <% items.forEach(function(item) { %>
                 <tr>
-                    <td><%= item.test_column1 %></td>
-                    <td><%= item.test_column2 %></td>
+                    <td><%= item.id %></td>
+                    <td><%= item.name %></td>
+                    <td><%= item.type %></td>
+                    <td><%= item.serial %></td>
+                    <td><%= item.status %></td>
+                    <td><%= item.description %></td>
                 </tr>
             <% }); %>
         </tbody>
