@@ -36,14 +36,26 @@ app.get('/loginpage', (req, res) => {
 
 
 app.post('/login', (req, res) => {
-  const {username, password} = req.body;
-    if (username == db.read("users", "username", (err, result) => {return result;}) && password == db.read("users", "password"), (err, result) => {return result;}) {
-        res.redirect("/mainpage");
-    }
-    else {
-      console.log(req.body);
-        res.status(401).send("Невірний логін або пароль");
-    }
+    const { username, password } = req.body;
+
+    db.read("users", "*", (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send("DB error");
+        }
+
+        const matchedUser = results.find((user) => {
+            const userLogin = user.username ?? user.login;
+            const userPassword = user.password ?? user.password;
+            return userLogin === username && userPassword === password;
+        });
+
+        if (matchedUser) {
+            return res.redirect("/mainpage");
+        }
+
+        return res.status(401).send("Невірний логін або пароль");
+    });
 });
 
 app.post('/add-item', (req, res) => {
