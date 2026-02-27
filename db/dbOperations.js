@@ -13,9 +13,12 @@ const dbOperations = {
             console.log("1 record inserted");
         });
     },
-    remove: (tableName, data) => {
-        let sql_query = `DELETE FROM ${tableName} WHERE test_column1 = ${data.id}`;
+    remove: (tableName, column, data, callback) => {
+        let sql_query = `DELETE FROM ${tableName} WHERE ${column} = ${data.id}`;
         db.query(sql_query, function (err, result) {
+            if (callback) {
+                return callback(err, result);
+            }
             if (err) throw err;
             console.log("1 record deleted");
         });

@@ -15,6 +15,7 @@
                 <th>Серійний номер</th>
                 <th>Статус</th>
                 <th>Опис</th>
+                <th>Дія</th>
             </tr>
         </thead>
         <tbody>
@@ -26,7 +27,14 @@
                     <td><%= item.serial %></td>
                     <td><%= item.status %></td>
                     <td><%= item.description %></td>
+                    <td>
+                        <form action="/remove" method="POST" style="display:inline;">
+                        <input type="hidden" name="id" value="<%= item.id %>">
+                        <button type="submit">Видалити</button>
+                        </form>
+                    </td>
                 </tr>
+                
             <% }); %>
             <form action="/add-item" method="POST">
                 <input type="number" placeholder="ID" name="id" required>

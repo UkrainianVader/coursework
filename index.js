@@ -37,6 +37,14 @@ app.post('/add-item', (req, res) => {
     });
 });
 
+app.post("/remove", (req, res) => {
+    const { id } = req.body;
+    db.remove("components", "id", { id }, (err, result) => {
+        if (err) return res.status(500).send(err);
+        res.redirect('/');
+    });
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
