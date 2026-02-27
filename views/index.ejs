@@ -28,6 +28,27 @@
                     <td><%= item.description %></td>
                 </tr>
             <% }); %>
+            <form action="/add-item" method="POST">
+                <input type="number" placeholder="ID" name="id" required>
+    <input type="text" name="name" placeholder="Назва пристрою" required>
+    
+    <select name="type">
+        <option value="контролер">Контролер</option>
+        <option value="датчик">Датчик</option>
+        <option value="модуль">Модуль</option>
+    </select>
+
+    <input type="text" name="serial" placeholder="Серійний номер">
+
+    <textarea name="description" placeholder="Технічні характеристики"></textarea>
+
+    <select name="status">
+        <option value="вільне">Вільне</option>
+        <option value="ремонт">Ремонт</option>
+    </select>
+
+    <button type="submit">Додати обладнання</button>
+</form>
         </tbody>
     </table>
 

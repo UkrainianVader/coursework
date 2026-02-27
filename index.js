@@ -10,10 +10,11 @@ const port = 3000
 //     console.log("1 record inserted");
 //   });
 
-db.insert("components", {id: 123, name: "I2C екран", type: "модуль", serial: "testserialnumber123", status: "використовується", description: "Ну типу екран"});
+//db.insert("components", {id: 123, name: "I2C екран", type: "модуль", serial: "testserialnumsdfsfdsdfsdfsdfber123", status: "використовується", description: "Ну типу екран"});
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
     db.read("components", (err, results) => {
@@ -24,6 +25,18 @@ app.get('/', (req, res) => {
         res.render('index', { items: results });
     });
 });
+
+app.post('/add-item', (req, res) => {
+    const { id, name, type, serial, description, status } = req.body;
+    const item = { id, name, type, serial, status, description };
+
+    db.insert("components", item, (err, result) => {
+        if (err) return res.status(500).send(err);
+        
+        res.redirect('/'); 
+    });
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })

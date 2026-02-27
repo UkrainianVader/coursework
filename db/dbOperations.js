@@ -1,9 +1,14 @@
 let db = require("./db_connections.js")
 
 const dbOperations = {
-    insert: (tableName, data) => {
-        let sql_query = `INSERT INTO ${tableName} VALUES (${data.id}, '${data.name}', '${data.type}', '${data.serial}', '${data.status}', '${data.description}')`;
-        db.query(sql_query, function (err, result) {
+    insert: (tableName, data, callback) => {
+        let sql_query = `INSERT INTO ${tableName} (id, name, type, serial, status, description) VALUES (?, ?, ?, ?, ?, ?)`;
+        let values = [data.id, data.name, data.type, data.serial, data.status, data.description];
+
+        db.query(sql_query, values, function (err, result) {
+            if (callback) {
+                return callback(err, result);
+            }
             if (err) throw err;
             console.log("1 record inserted");
         });
