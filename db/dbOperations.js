@@ -30,8 +30,8 @@ const dbOperations = {
             console.log("1 record updated");
         });
     },
-    read: (tableName, callback) => {
-        let sql_query = `SELECT * FROM ${tableName}`;
+    read: (tableName, column, callback) => {
+        let sql_query = `SELECT ${column} FROM ${tableName}`;
         db.query(sql_query, function (err, result) {
             if (callback) {
                 return callback(err, result);
