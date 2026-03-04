@@ -1,3 +1,8 @@
+# Required packages
+```js
+npm install express express-session mysql2 dotenv
+```
+
 # TODO:
 ## Base functionality:
 - [x] DB access
@@ -14,7 +19,6 @@
 - [ ] ???
 ## Technical:
 - [ ] SHA password encryption
-- [ ] Sign out
-- [ ] Remember session with cookies
+- [x] Remember session with cookies
 - [ ] Split express server and other features in separate files
 - [ ] Non-admin should have no rights to add, edit or assign components
