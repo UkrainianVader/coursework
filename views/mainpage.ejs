@@ -36,6 +36,17 @@
                         <button type="submit">Видалити</button>
                         </form>
                     </td>
+                    <td>
+            <button class="edit-btn" 
+                    data-id="<%= item.id %>" 
+                    data-name="<%= item.name %>"
+                    data-type="<%= item.type %>"
+                    data-serial="<%= item.serial %>"
+                    data-status="<%= item.status %>"
+                    data-description="<%= item.description %>">
+                Редагувати
+            </button>
+        </td>
                 </tr>
                 
             <% }); %>
@@ -62,6 +73,63 @@
 </form>
         </tbody>
     </table>
+<dialog id="editModal">
+    <form action="/update-item" method="POST">
+        <input type="hidden" name="id" id="modalId">
+        <input type="text" name="name" id="modalName">
+        <select name="type" id="modalType">
+            <option value="контролер">Контролер</option>
+            <option value="датчик">Датчик</option>
+            <option value="модуль">Модуль</option>
+        </select>
+        <input type="text" name="serial" id="modalSerial" placeholder="Серійний номер">
 
+        <textarea name="description" id="modalDescription" placeholder="Технічні характеристики"></textarea>
+
+        <select name="status" id="modalStatus">
+            <option value="вільне">Вільне</option>
+            <option value="ремонт">Ремонт</option>
+        </select>
+        <button type="button" id="closeBtn">Скасувати</button>
+        <button type="submit">Зберегти</button>
+    </form>
+</dialog>
 </body>
+<script>
+    const modal = document.getElementById('editModal');
+    const closeBtn = document.getElementById('closeBtn');
+    
+    const inputId = document.getElementById('modalId');
+    const inputName = document.getElementById('modalName');
+    const selectType = document.getElementById('modalType');
+    const inputSerial = document.getElementById('modalSerial');
+    const selectStatus = document.getElementById('modalStatus');
+    const inputDescription = document.getElementById('modalDescription');
+
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('edit-btn')) {
+            
+            const id = e.target.dataset.id;
+            const name = e.target.dataset.name;
+            const type = e.target.dataset.type;
+            const serial = e.target.dataset.serial;
+            const status = e.target.dataset.status;
+            const description = e.target.dataset.description;
+
+
+            inputId.value = id;
+            inputName.value = name;
+            selectType.value = type;
+            inputSerial.value = serial;
+            selectStatus.value = status;
+            inputDescription.value = description;
+
+            modal.showModal();
+        }
+    });
+
+    closeBtn.addEventListener('click', () => {
+        modal.close();
+    });
+</script>
 </html>
