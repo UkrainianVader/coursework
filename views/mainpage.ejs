@@ -124,7 +124,7 @@
             <option value="вільне">Вільне</option>
             <option value="ремонт">Ремонт</option>
         </select>
-        <button type="button" id="closeBtn">Скасувати</button>
+        <button type="button" id="addCloseBtn">Скасувати</button>
         <button type="submit">Додати компонент</button>
     </form>
 </dialog>
@@ -134,6 +134,7 @@
     const editModal = document.getElementById('editModal');
     const addModal = document.getElementById('addModal');
     const closeBtn = document.getElementById('closeBtn');
+    const addCloseBtn = document.getElementById('addCloseBtn');
     
     const inputId = document.getElementById('modalId');
     const inputName = document.getElementById('modalName');
@@ -161,6 +162,10 @@
             inputDescription.value = description;
 
             editModal.showModal();
+            
+    closeBtn.addEventListener('click', () => {
+        editModal.close();
+    });
         }
         else if (e.target.classList.contains('add-btn')) {
             const id = e.target.dataset.id;
@@ -179,11 +184,13 @@
             inputDescription.value = description;
 
             addModal.showModal();
+
+            
+    addCloseBtn.addEventListener('click', () => {
+        addModal.close();
+    });
         }
     });
 
-    closeBtn.addEventListener('click', () => {
-        modal.close();
-    });
 </script>
 </html>
