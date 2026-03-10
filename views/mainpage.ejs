@@ -2,12 +2,14 @@
 <html>
 <head>
     <title>Облік</title>
+    
+    <link rel="stylesheet" type="text/css" href="/styles.css">
 </head>
-<body>
+<body id="main-page">
 
-    <h1>Список обладнання</h1>
+    <h1 id="main-page-title">Список обладнання</h1>
     <form action="/logout" method="POST">
-        <button type="submit">Вийти</button>
+        <button type="submit" id="logout-button">Вийти</button>
     </form>
 
     <table border="1"> <thead>
@@ -35,8 +37,6 @@
                         <input type="hidden" name="id" value="<%= item.id %>">
                         <button type="submit">Видалити</button>
                         </form>
-                    </td>
-                    <td>
             <button class="edit-btn" 
                     data-id="<%= item.id %>" 
                     data-name="<%= item.name %>"
