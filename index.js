@@ -109,6 +109,15 @@ app.post('/logout', (req, res) => {
     });
 });
 
+app.post('update-item', requireAuth, (req, res) => {
+    const { id, name, type, serial, status, description } = req.body;
+    db.update("components", { id, name, type, serial, status, description }, (err, result) => {
+        if (err) return res.status(500).send('Server error');
+        res.redirect('/');
+    });
+});
+
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
