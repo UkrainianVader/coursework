@@ -23,9 +23,14 @@ const dbOperations = {
             console.log("1 record deleted");
         });
     },
-    update: (tableName, data) => {
-        let sql_query = `UPDATE ${tableName} SET test_column2 = '${data.name}' WHERE test_column1 = ${data.id}`;
-        db.query(sql_query, function (err, result) {
+    update: (tableName, data, callback) => {
+        let sql_query = `UPDATE ${tableName} SET name = ?, type = ?, serial = ?, status = ?, description = ? WHERE id = ?`;
+        let values = [data.name, data.type, data.serial, data.status, data.description, data.id];
+
+        db.query(sql_query, values, function (err, result) {
+            if (callback) {
+                return callback(err, result);
+            }
             if (err) throw err;
             console.log("1 record updated");
         });
