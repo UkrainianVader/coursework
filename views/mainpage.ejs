@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Облік</title>
-    
-    <link rel="stylesheet" type="text/css" href="/styles.css">
-</head>
-<body id="main-page">
+    <head>
+        <title>Облік</title>
 
-    <h1 id="main-page-title">Список обладнання</h1>
-    <form action="/logout" method="POST">
-        <button type="submit" id="logout-button">Вийти</button>
-    </form>
+        <link rel="stylesheet" type="text/css" href="/styles.css">
+    </head>
+    <body id="main-page">
 
-    <table border="1"> <thead>
-            <tr>
-                <th>ID</th>
-                <th>Назва</th>
-                <th>Тип</th>
-                <th>Серійний номер</th>
-                <th>Статус</th>
-                <th>Опис</th>
-                <th>Дія</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% items.forEach(function(item) { %>
+        <h1 id="main-page-title">Список обладнання</h1>
+        <form action="/logout" method="POST">
+            <button type="submit" id="logout-button">Вийти</button>
+        </form>
+
+        <table border="1"> <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Назва</th>
+                    <th>Тип</th>
+                    <th>Серійний номер</th>
+                    <th>Статус</th>
+                    <th>Опис</th>
+                    <th>Дія</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% items.forEach(function(item) { %>
                 <tr>
                     <td><%= item.id %></td>
                     <td><%= item.name %></td>
@@ -33,104 +33,89 @@
                     <td><%= item.status %></td>
                     <td><%= item.description %></td>
                     <td>
-                        <form action="/remove" method="POST" style="display:inline;">
-                        <input type="hidden" name="id" value="<%= item.id %>">
-                        <button type="submit">Видалити</button>
+                        <form action="/remove" method="POST"
+                            style="display:inline;">
+                            <input type="hidden" name="id"
+                                value="<%= item.id %>">
+                            <button type="submit"
+                                id="delete-button">Видалити</button>
                         </form>
-            <button class="edit-btn" 
-                    data-id="<%= item.id %>" 
-                    data-name="<%= item.name %>"
-                    data-type="<%= item.type %>"
-                    data-serial="<%= item.serial %>"
-                    data-status="<%= item.status %>"
-                    data-description="<%= item.description %>">
-                Редагувати
-            </button>
-        </td>
+                        <button class="edit-btn"
+                            data-id="<%= item.id %>"
+                            data-name="<%= item.name %>"
+                            data-type="<%= item.type %>"
+                            data-serial="<%= item.serial %>"
+                            data-status="<%= item.status %>"
+                            data-description="<%= item.description %>">
+                            Редагувати
+                        </button>
+                    </td>
                 </tr>
-                
-            <% }); %>
-            <!-- <form action="/add-item" method="POST">
-                <input type="number" placeholder="ID" name="id" required>
-    <input type="text" name="name" placeholder="Назва пристрою" required>
-    
-    <select name="type">
-        <option value="контролер">Контролер</option>
-        <option value="датчик">Датчик</option>
-        <option value="модуль">Модуль</option>
-    </select>
 
-    <input type="text" name="serial" placeholder="Серійний номер">
+                <% }); %>
+            </tbody>
+        </table>
 
-    <textarea name="description" placeholder="Технічні характеристики"></textarea>
+        <button class="add-btn"
+            data-id
+            data-name
+            data-type
+            data-serial
+            data-status
+            data-description>
+            Додати обладнання
+        </button>
 
-    <select name="status">
-        <option value="вільне">Вільне</option>
-        <option value="ремонт">Ремонт</option>
-    </select>
+        <dialog id="editModal">
+            <form action="/update-item" method="POST">
+                <input type="hidden" name="id" id="modalId">
+                <input type="text" name="name" id="modalName">
+                <select name="type" id="modalType">
+                    <option value="контролер">Контролер</option>
+                    <option value="датчик">Датчик</option>
+                    <option value="модуль">Модуль</option>
+                </select>
+                <input type="text" name="serial" id="modalSerial"
+                    placeholder="Серійний номер">
 
-    <button type="submit">Додати обладнання</button>
-</form> -->
-        </tbody>
-    </table>
+                <textarea name="description" id="modalDescription"
+                    placeholder="Технічні характеристики"></textarea>
 
-<button class="add-btn" 
-                    data-id="" 
-                    data-name=""
-                    data-type=""
-                    data-serial=""
-                    data-status=""
-                    data-description="">
-                Додати обладнання
-            </button>
+                <select name="status" id="modalStatus">
+                    <option value="вільне">Вільне</option>
+                    <option value="ремонт">Ремонт</option>
+                </select>
+                <button type="button" id="closeBtn">Скасувати</button>
+                <button type="submit">Зберегти</button>
+            </form>
+        </dialog>
 
-<dialog id="editModal">
-    <form action="/update-item" method="POST">
-        <input type="hidden" name="id" id="modalId">
-        <input type="text" name="name" id="modalName">
-        <select name="type" id="modalType">
-            <option value="контролер">Контролер</option>
-            <option value="датчик">Датчик</option>
-            <option value="модуль">Модуль</option>
-        </select>
-        <input type="text" name="serial" id="modalSerial" placeholder="Серійний номер">
+        <dialog id="addModal">
+            <form action="/add-item" method="POST">
+                <input type="text" name="id" id="modalId">
+                <input type="text" name="name" id="modalName">
+                <select name="type" id="modalType">
+                    <option value="контролер">Контролер</option>
+                    <option value="датчик">Датчик</option>
+                    <option value="модуль">Модуль</option>
+                </select>
+                <input type="text" name="serial" id="modalSerial"
+                    placeholder="Серійний номер">
 
-        <textarea name="description" id="modalDescription" placeholder="Технічні характеристики"></textarea>
+                <textarea name="description" id="modalDescription"
+                    placeholder="Технічні характеристики"></textarea>
 
-        <select name="status" id="modalStatus">
-            <option value="вільне">Вільне</option>
-            <option value="ремонт">Ремонт</option>
-        </select>
-        <button type="button" id="closeBtn">Скасувати</button>
-        <button type="submit">Зберегти</button>
-    </form>
-</dialog>
+                <select name="status" id="modalStatus">
+                    <option value="вільне">Вільне</option>
+                    <option value="ремонт">Ремонт</option>
+                </select>
+                <button type="button" id="addCloseBtn">Скасувати</button>
+                <button type="submit">Додати компонент</button>
+            </form>
+        </dialog>
 
-
-<dialog id="addModal">
-    <form action="/add-item" method="POST">
-        <input type="text" name="id" id="modalId">
-        <input type="text" name="name" id="modalName">
-        <select name="type" id="modalType">
-            <option value="контролер">Контролер</option>
-            <option value="датчик">Датчик</option>
-            <option value="модуль">Модуль</option>
-        </select>
-        <input type="text" name="serial" id="modalSerial" placeholder="Серійний номер">
-
-        <textarea name="description" id="modalDescription" placeholder="Технічні характеристики"></textarea>
-
-        <select name="status" id="modalStatus">
-            <option value="вільне">Вільне</option>
-            <option value="ремонт">Ремонт</option>
-        </select>
-        <button type="button" id="addCloseBtn">Скасувати</button>
-        <button type="submit">Додати компонент</button>
-    </form>
-</dialog>
-
-</body>
-<script>
+    </body>
+    <script>
     const editModal = document.getElementById('editModal');
     const addModal = document.getElementById('addModal');
     const closeBtn = document.getElementById('closeBtn');

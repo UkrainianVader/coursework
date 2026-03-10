@@ -27,8 +27,20 @@ body.login-page {
     border-collapse: collapse;
 }
 
-#main-page table button{
+#delete-button{
+    background-color: red;
+    color: white;
+    cursor: pointer;
+}
+
+.edit-btn{
     background-color: #ad9b00;
+    color: white;
+    cursor: pointer;
+}
+
+.add-btn{
+    background-color: #4CAF50;
     color: white;
     cursor: pointer;
 }
