@@ -50,7 +50,7 @@
                 </tr>
                 
             <% }); %>
-            <form action="/add-item" method="POST">
+            <!-- <form action="/add-item" method="POST">
                 <input type="number" placeholder="ID" name="id" required>
     <input type="text" name="name" placeholder="Назва пристрою" required>
     
@@ -70,9 +70,20 @@
     </select>
 
     <button type="submit">Додати обладнання</button>
-</form>
+</form> -->
         </tbody>
     </table>
+
+<button class="add-btn" 
+                    data-id="" 
+                    data-name=""
+                    data-type=""
+                    data-serial=""
+                    data-status=""
+                    data-description="">
+                Додати обладнання
+            </button>
+
 <dialog id="editModal">
     <form action="/update-item" method="POST">
         <input type="hidden" name="id" id="modalId">
@@ -94,9 +105,34 @@
         <button type="submit">Зберегти</button>
     </form>
 </dialog>
+
+
+<dialog id="addModal">
+    <form action="/add-item" method="POST">
+        <input type="text" name="id" id="modalId">
+        <input type="text" name="name" id="modalName">
+        <select name="type" id="modalType">
+            <option value="контролер">Контролер</option>
+            <option value="датчик">Датчик</option>
+            <option value="модуль">Модуль</option>
+        </select>
+        <input type="text" name="serial" id="modalSerial" placeholder="Серійний номер">
+
+        <textarea name="description" id="modalDescription" placeholder="Технічні характеристики"></textarea>
+
+        <select name="status" id="modalStatus">
+            <option value="вільне">Вільне</option>
+            <option value="ремонт">Ремонт</option>
+        </select>
+        <button type="button" id="closeBtn">Скасувати</button>
+        <button type="submit">Додати компонент</button>
+    </form>
+</dialog>
+
 </body>
 <script>
-    const modal = document.getElementById('editModal');
+    const editModal = document.getElementById('editModal');
+    const addModal = document.getElementById('addModal');
     const closeBtn = document.getElementById('closeBtn');
     
     const inputId = document.getElementById('modalId');
@@ -124,7 +160,25 @@
             selectStatus.value = status;
             inputDescription.value = description;
 
-            modal.showModal();
+            editModal.showModal();
+        }
+        else if (e.target.classList.contains('add-btn')) {
+            const id = e.target.dataset.id;
+            const name = e.target.dataset.name;
+            const type = e.target.dataset.type;
+            const serial = e.target.dataset.serial;
+            const status = e.target.dataset.status;
+            const description = e.target.dataset.description;
+
+
+            inputId.value = id;
+            inputName.value = name;
+            selectType.value = type;
+            inputSerial.value = serial;
+            selectStatus.value = status;
+            inputDescription.value = description;
+
+            addModal.showModal();
         }
     });
 

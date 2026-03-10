@@ -16,7 +16,7 @@ npm install express express-session mysql2 dotenv
 - [ ] Beatuify
 - [ ] Generate reports
 - [ ] Filtering by type, sorting etc.
-- [ ] Add component in dialog window
+- [x] Add component in dialog window
 - [ ] ???
 ## Technical:
 - [ ] SHA password encryption
