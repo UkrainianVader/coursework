@@ -69,7 +69,7 @@
         <dialog id="editModal">
             <form action="/update-item" method="POST">
                 <input type="hidden" name="id" id="modalId">
-                <input type="text" name="name" id="modalName">
+                <input type="text" name="name" id="modalName" placeholder="Назва">
                 <select name="type" id="modalType">
                     <option value="контролер">Контролер</option>
                     <option value="датчик">Датчик</option>
@@ -92,8 +92,8 @@
 
         <dialog id="addModal">
             <form action="/add-item" method="POST">
-                <input type="text" name="id" id="modalId">
-                <input type="text" name="name" id="modalName">
+                <input type="text" name="id" id="modalId" placeholder="ID">
+                <input type="text" name="name" id="modalName" placeholder="Назва">
                 <select name="type" id="modalType">
                     <option value="контролер">Контролер</option>
                     <option value="датчик">Датчик</option>
