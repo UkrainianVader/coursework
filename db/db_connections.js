@@ -21,7 +21,25 @@ con.connect(function(err) {
     });
     tempCon.connect(function(err) {
       if (err) throw err;
-      tempCon.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`, function(err, result) {
+      tempCon.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`);
+      tempCon.query(`USE ${process.env.DB_NAME}`);
+      tempCon.query(`CREATE TABLE IF NOT EXISTS \`components\` (
+            \`id\` int DEFAULT NULL,
+            \`name\` varchar(255) DEFAULT NULL,
+            \`type\` varchar(255) DEFAULT NULL,
+            \`serial\` varchar(255) DEFAULT NULL,
+            \`status\` varchar(255) DEFAULT NULL,
+            \`description\` text,
+            UNIQUE KEY \`serial\` (\`serial\`))`);
+            
+      tempCon.query(`CREATE TABLE IF NOT EXISTS \`users\` (
+            \`id\` int NOT NULL AUTO_INCREMENT,
+            \`username\` text,
+            \`password\` text,
+            PRIMARY KEY (\`id\`))`);
+    
+      tempCon.query(`INSERT INTO \`users\` VALUES (1,'admin','admin')`
+        , function(err, result) {
         if (err) throw err;
         console.log("Database created or already exists");
         tempCon.end();

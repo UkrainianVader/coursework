@@ -11,7 +11,9 @@ npm install express express-session mysql2 dotenv
 - [x] Updating specific component
 - [ ] Temporary using component
 ## Features:
-- [ ] DB init in case it doesn't exist
+- [x] DB init in case it doesn't exist
+  - [ ] prompt for admin password?
+  - [ ] write password in SHA
 - [ ] User management (create, remove etc)
 - [ ] Beatuify
 - [ ] Generate reports
