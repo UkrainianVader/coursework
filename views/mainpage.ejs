@@ -32,6 +32,7 @@
                     <td><%= item.serial %></td>
                     <td><%= item.status %></td>
                     <td><%= item.description %></td>
+                    <% if (user && user.role === 'admin') { %>
                     <td>
                         <form action="/remove" method="POST"
                             style="display:inline;">
@@ -50,21 +51,12 @@
                             Редагувати
                         </button>
                     </td>
+                    <% } %>
                 </tr>
 
                 <% }); %>
             </tbody>
         </table>
-
-        <button class="add-btn"
-            data-id
-            data-name
-            data-type
-            data-serial
-            data-status
-            data-description>
-            Додати обладнання
-        </button>
 
         <dialog id="editModal">
             <form action="/update-item" method="POST">
@@ -115,6 +107,15 @@
         </dialog>
 
         <% if (user && user.role === 'admin') { %>
+            <button class="add-btn"
+                data-id
+                data-name
+                data-type
+                data-serial
+                data-status
+                data-description>
+                Додати обладнання
+            </button>
             <button id="create-user-button">Створити користувача</button>
         <% } %>
 
