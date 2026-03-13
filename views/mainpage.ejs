@@ -50,15 +50,23 @@
                             data-description="<%= item.description %>">
                             Редагувати
                         </button>
-                        <button class="assignBtn"
-                            data-id="<%= item.id %>"
-                            data-name="<%= item.name %>"
-                            data-type="<%= item.type %>"
-                            data-serial="<%= item.serial %>"
-                            data-status="<%= item.status %>"
-                            data-description="<%= item.description %>">
-                            Призначити користувачу
-                        </button>
+                        
+                        <% if (assignedEquipmentIds && assignedEquipmentIds.includes(Number(item.id))) { %>
+                            <form action="/unassign-item" method="POST" style="display:inline;">
+                                <input type="hidden" name="id" value="<%= item.id %>">
+                                <button type="submit">Зняти призначення</button>
+                            </form>
+                        <% } else { %>
+                            <button class="assignBtn"
+                                data-id="<%= item.id %>"
+                                data-name="<%= item.name %>"
+                                data-type="<%= item.type %>"
+                                data-serial="<%= item.serial %>"
+                                data-status="<%= item.status %>"
+                                data-description="<%= item.description %>">
+                                Призначити користувачу
+                            </button>
+                        <% } %>
                     </td>
                     <% } %>
                 </tr>
