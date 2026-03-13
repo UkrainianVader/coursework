@@ -103,9 +103,17 @@ app.get("/mainpage", requireAuth, (req, res) => {
             return res.status(500).send("DB error");
         }
 
-        res.render('mainpage', {
-            items: results,
-            user: req.session.user
+        db.read("users", "id, username", (usersErr, usersResults) => {
+            if (usersErr) {
+                console.error(usersErr);
+                return res.status(500).send("DB error");
+            }
+
+            res.render('mainpage', {
+                items: results,
+                users: usersResults,
+                user: req.session.user
+            });
         });
     });
 });
@@ -137,6 +145,19 @@ app.post('/add-user', requireAuth, requireAdmin, (req, res) => {
             console.log(err);
             return res.status(500).send('Server error');
             console.log(err);
+        }
+        res.redirect('/mainpage');
+    });
+});
+
+app.post('/assign-item', requireAuth, (req, res) => {
+    const { id, userId } = req.body;
+    const usageEntry = { equipment_id: id, user_id: userId || null };
+
+    db.insert("usage_history", "(equipment_id, user_id)", usageEntry, (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Server error');
         }
         res.redirect('/mainpage');
     });

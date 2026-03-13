@@ -39,6 +39,17 @@ con.connect(function(err) {
             \`password\` text,
             \`role\` varchar(50) DEFAULT 'user',
             PRIMARY KEY (\`id\`))`);
+
+      tempCon.query(`CREATE TABLE IF NOT EXISTS \`usage_history\` (
+        \`id\` int NOT NULL AUTO_INCREMENT,
+        \`user_id\` int DEFAULT NULL,
+        \`equipment_id\` int NOT NULL,
+        \`date_taken\` datetime DEFAULT CURRENT_TIMESTAMP,
+        \`date_returned\` datetime DEFAULT NULL,
+        PRIMARY KEY (\`id\`),
+        CONSTRAINT \`fk_user\` FOREIGN KEY (\`user_id\`) REFERENCES \`users\` (\`id\`) ON DELETE SET NULL,
+        CONSTRAINT \`fk_equipment\` FOREIGN KEY (\`equipment_id\`) REFERENCES \`components\` (\`id\`) ON DELETE CASCADE
+      )`);
     
       tempCon.query(`INSERT INTO \`users\` (id, username, password, role) VALUES (1,'admin','admin','admin')`
         , function(err, result) {
@@ -50,6 +61,20 @@ con.connect(function(err) {
     }
     else throw err;
   }
+  con.query(`CREATE TABLE IF NOT EXISTS \`usage_history\` (
+        \`id\` int NOT NULL AUTO_INCREMENT,
+        \`user_id\` int DEFAULT NULL,
+        \`equipment_id\` int NOT NULL,
+        \`date_taken\` datetime DEFAULT CURRENT_TIMESTAMP,
+        \`date_returned\` datetime DEFAULT NULL,
+        PRIMARY KEY (\`id\`),
+        CONSTRAINT \`fk_user\` FOREIGN KEY (\`user_id\`) REFERENCES \`users\` (\`id\`) ON DELETE SET NULL,
+        CONSTRAINT \`fk_equipment\` FOREIGN KEY (\`equipment_id\`) REFERENCES \`components\` (\`id\`) ON DELETE CASCADE
+      )`, function(tableErr) {
+    if (tableErr) {
+      console.error('Failed to ensure usage_history table:', tableErr);
+    }
+  });
   console.log("Connected!");
 });
 

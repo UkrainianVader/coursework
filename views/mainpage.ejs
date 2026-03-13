@@ -50,6 +50,15 @@
                             data-description="<%= item.description %>">
                             Редагувати
                         </button>
+                        <button class="assignBtn"
+                            data-id="<%= item.id %>"
+                            data-name="<%= item.name %>"
+                            data-type="<%= item.type %>"
+                            data-serial="<%= item.serial %>"
+                            data-status="<%= item.status %>"
+                            data-description="<%= item.description %>">
+                            Призначити користувачу
+                        </button>
                     </td>
                     <% } %>
                 </tr>
@@ -79,6 +88,19 @@
                 </select>
                 <button type="button" id="closeBtn">Скасувати</button>
                 <button type="submit">Зберегти</button>
+            </form>
+        </dialog>
+
+        <dialog id="assignModal">
+            <form action="/assign-item" method="POST">
+                <input type="hidden" name="id" id="assignModalId">
+                <select name="userId" id="assignModalUser">
+                    <% users.forEach(function(user) { %>
+                        <option value="<%= user.id %>"><%= user.username %></option>
+                    <% }); %>
+                </select>
+                <button type="button" id="assignCloseBtn">Скасувати</button>
+                <button type="submit">Призначити</button>
             </form>
         </dialog>
 
@@ -138,9 +160,12 @@
         const editModal = document.getElementById('editModal');
         const addModal = document.getElementById('addModal');
         const addUserModal = document.getElementById('addUserModal');
+        const assignModal = document.getElementById('assignModal');
+
         const closeBtn = document.getElementById('closeBtn');
         const addCloseBtn = document.getElementById('addCloseBtn');
         const addUserCloseBtn = document.getElementById('addUserCloseBtn');
+        const assignCloseBtn = document.getElementById('assignCloseBtn');
         
         const inputId = document.getElementById('modalId');
         const inputName = document.getElementById('modalName');
@@ -152,6 +177,9 @@
         const inputUsername = document.getElementById('modalUsername');
         const inputPassword = document.getElementById('modalPassword');
         const selectRole = document.getElementById('modalRole');
+        
+        const assignModalId = document.getElementById('assignModalId');
+        const assignModalUser = document.getElementById('assignModalUser');
 
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('edit-btn')) {
@@ -211,6 +239,16 @@
                     const addUserCloseBtn = document.getElementById('addUserCloseBtn');
                     addUserCloseBtn.addEventListener('click', () => {
                         addUserModal.close();
+                    });
+                }
+            else if (e.target.classList.contains('assignBtn')) {
+                    const id = e.target.dataset.id;
+                    assignModalId.value = id;
+                    assignModal.showModal();
+    
+                    const assignCloseBtn = document.getElementById('assignCloseBtn');
+                    assignCloseBtn.addEventListener('click', () => {
+                        assignModal.close();
                     });
                 }
         });
