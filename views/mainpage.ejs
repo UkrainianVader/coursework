@@ -92,7 +92,7 @@
 
         <dialog id="addModal">
             <form action="/add-item" method="POST">
-                <input type="text" name="id" id="modalId" placeholder="ID">
+                <!-- <input type="text" name="id" id="modalId" placeholder="ID"> -->
                 <input type="text" name="name" id="modalName" placeholder="Назва">
                 <select name="type" id="modalType">
                     <option value="контролер">Контролер</option>
@@ -125,6 +125,7 @@
                 <select name="role" id="modalRole">
                     <option value="user">Користувач</option>
                     <option value="admin">Адміністратор</option>
+                    <option value="teacher">Викладач</option>
                 </select>
                 <button type="button" id="addUserCloseBtn">Скасувати</button>
                 <button type="submit">Створити користувача</button>

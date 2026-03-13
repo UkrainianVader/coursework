@@ -77,11 +77,11 @@ app.post('/login', (req, res) => {
 });
 
 app.post('/add-item', requireAuth, (req, res) => {
-    const { id, name, type, serial, description, status } = req.body;
+    const { name, type, serial, description, status } = req.body;
     console.log(req.body);
-    const item = { id, name, type, serial, status, description };
+    const item = { name, type, serial, status, description };
 
-    db.insert("components", "(id, name, type, serial, status, description)", item, (err, result) => {
+    db.insert("components", "(name, type, serial, status, description)", item, (err, result) => {
         if (err) return res.status(500).send(err);
         
         res.redirect('/'); 

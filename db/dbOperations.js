@@ -10,8 +10,6 @@ const dbOperations = {
         let sql_query = hasValues 
             ? `INSERT INTO ${tableName} ${columns}`
             : `INSERT INTO ${tableName} ${columns} VALUES (${columnNames.map(() => '?').join(', ')})`;
-        
-        console.log("Insert debug:", { tableName, columns, data, columnNames, values, sql_query });
 
         db.query(sql_query, values, function (err, result) {
             if (callback) {

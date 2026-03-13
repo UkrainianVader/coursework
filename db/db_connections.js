@@ -24,13 +24,14 @@ con.connect(function(err) {
       tempCon.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`);
       tempCon.query(`USE ${process.env.DB_NAME}`);
       tempCon.query(`CREATE TABLE IF NOT EXISTS \`components\` (
-            \`id\` int DEFAULT NULL,
+        \`id\` int NOT NULL AUTO_INCREMENT,
             \`name\` varchar(255) DEFAULT NULL,
             \`type\` varchar(255) DEFAULT NULL,
             \`serial\` varchar(255) DEFAULT NULL,
             \`status\` varchar(255) DEFAULT NULL,
             \`description\` text,
-            UNIQUE KEY \`serial\` (\`serial\`))`);
+        PRIMARY KEY (\`id\`),
+        UNIQUE KEY \`serial\` (\`serial\`))`);
             
       tempCon.query(`CREATE TABLE IF NOT EXISTS \`users\` (
             \`id\` int NOT NULL AUTO_INCREMENT,
