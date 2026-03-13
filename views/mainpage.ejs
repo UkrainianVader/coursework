@@ -114,68 +114,104 @@
             </form>
         </dialog>
 
+        <% if (user && user.role === 'admin') { %>
+            <button id="create-user-button">Створити користувача</button>
+        <% } %>
+
+        <dialog id="addUserModal">
+            <form action="/add-user" method="POST">
+                <input type="text" name="username" id="modalUsername" placeholder="Логін">
+                <input type="password" name="password" id="modalPassword" placeholder="Пароль">
+                <select name="role" id="modalRole">
+                    <option value="user">Користувач</option>
+                    <option value="admin">Адміністратор</option>
+                </select>
+                <button type="button" id="addUserCloseBtn">Скасувати</button>
+                <button type="submit">Створити користувача</button>
+            </form>
+        </dialog>
+
     </body>
     <script>
-    const editModal = document.getElementById('editModal');
-    const addModal = document.getElementById('addModal');
-    const closeBtn = document.getElementById('closeBtn');
-    const addCloseBtn = document.getElementById('addCloseBtn');
+        const editModal = document.getElementById('editModal');
+        const addModal = document.getElementById('addModal');
+        const addUserModal = document.getElementById('addUserModal');
+        const closeBtn = document.getElementById('closeBtn');
+        const addCloseBtn = document.getElementById('addCloseBtn');
+        const addUserCloseBtn = document.getElementById('addUserCloseBtn');
+        
+        const inputId = document.getElementById('modalId');
+        const inputName = document.getElementById('modalName');
+        const selectType = document.getElementById('modalType');
+        const inputSerial = document.getElementById('modalSerial');
+        const selectStatus = document.getElementById('modalStatus');
+        const inputDescription = document.getElementById('modalDescription');
+
+        const inputUsername = document.getElementById('modalUsername');
+        const inputPassword = document.getElementById('modalPassword');
+        const selectRole = document.getElementById('modalRole');
+
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('edit-btn')) {
+                
+                const id = e.target.dataset.id;
+                const name = e.target.dataset.name;
+                const type = e.target.dataset.type;
+                const serial = e.target.dataset.serial;
+                const status = e.target.dataset.status;
+                const description = e.target.dataset.description;
+
+
+                inputId.value = id;
+                inputName.value = name;
+                selectType.value = type;
+                inputSerial.value = serial;
+                selectStatus.value = status;
+                inputDescription.value = description;
+
+                editModal.showModal();
+                
+        closeBtn.addEventListener('click', () => {
+            editModal.close();
+        });
+            }
+            else if (e.target.classList.contains('add-btn')) {
+                const id = e.target.dataset.id;
+                const name = e.target.dataset.name;
+                const type = e.target.dataset.type;
+                const serial = e.target.dataset.serial;
+                const status = e.target.dataset.status;
+                const description = e.target.dataset.description;
+
+
+                inputId.value = id;
+                inputName.value = name;
+                selectType.value = type;
+                inputSerial.value = serial;
+                selectStatus.value = status;
+                inputDescription.value = description;
+
+                addModal.showModal();
+
+                
+        addCloseBtn.addEventListener('click', () => {
+            addModal.close();
+        });
+            }
+                else if (e.target.id === 'create-user-button') {
+                    // Clear form fields for new user
+                    inputUsername.value = '';
+                    inputPassword.value = '';
+                    selectRole.value = 'user';
+
+                    addUserModal.showModal();
     
-    const inputId = document.getElementById('modalId');
-    const inputName = document.getElementById('modalName');
-    const selectType = document.getElementById('modalType');
-    const inputSerial = document.getElementById('modalSerial');
-    const selectStatus = document.getElementById('modalStatus');
-    const inputDescription = document.getElementById('modalDescription');
-
-    document.addEventListener('click', (e) => {
-        if (e.target.classList.contains('edit-btn')) {
-            
-            const id = e.target.dataset.id;
-            const name = e.target.dataset.name;
-            const type = e.target.dataset.type;
-            const serial = e.target.dataset.serial;
-            const status = e.target.dataset.status;
-            const description = e.target.dataset.description;
-
-
-            inputId.value = id;
-            inputName.value = name;
-            selectType.value = type;
-            inputSerial.value = serial;
-            selectStatus.value = status;
-            inputDescription.value = description;
-
-            editModal.showModal();
-            
-    closeBtn.addEventListener('click', () => {
-        editModal.close();
-    });
-        }
-        else if (e.target.classList.contains('add-btn')) {
-            const id = e.target.dataset.id;
-            const name = e.target.dataset.name;
-            const type = e.target.dataset.type;
-            const serial = e.target.dataset.serial;
-            const status = e.target.dataset.status;
-            const description = e.target.dataset.description;
-
-
-            inputId.value = id;
-            inputName.value = name;
-            selectType.value = type;
-            inputSerial.value = serial;
-            selectStatus.value = status;
-            inputDescription.value = description;
-
-            addModal.showModal();
-
-            
-    addCloseBtn.addEventListener('click', () => {
-        addModal.close();
-    });
-        }
-    });
+                    const addUserCloseBtn = document.getElementById('addUserCloseBtn');
+                    addUserCloseBtn.addEventListener('click', () => {
+                        addUserModal.close();
+                    });
+                }
+        });
 
 </script>
 </html>

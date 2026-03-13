@@ -27,6 +27,13 @@ const requireAuth = (req, res, next) => {
     next();
 };
 
+const requireAdmin = (req, res, next) => {
+    if (!req.session.user || req.session.user.role !== 'admin') {
+        return res.status(403).send('Forbidden');
+    }
+    next();
+};
+
 app.get('/', (req, res) => {
     if (req.session.user) {
         return res.redirect('/mainpage');
@@ -59,7 +66,8 @@ app.post('/login', (req, res) => {
         if (matchedUser) {
             req.session.user = {
                 id: matchedUser.id,
-                username: matchedUser.username ?? matchedUser.login
+                username: matchedUser.username,
+                role: matchedUser.role
             };
             return req.session.save(() => res.redirect('/mainpage'));
         }
@@ -73,7 +81,7 @@ app.post('/add-item', requireAuth, (req, res) => {
     console.log(req.body);
     const item = { id, name, type, serial, status, description };
 
-    db.insert("components", item, (err, result) => {
+    db.insert("components", "(id, name, type, serial, status, description)", item, (err, result) => {
         if (err) return res.status(500).send(err);
         
         res.redirect('/'); 
@@ -94,7 +102,11 @@ app.get("/mainpage", requireAuth, (req, res) => {
             console.error(err);
             return res.status(500).send("DB error");
         }
-        res.render('mainpage', { items: results });
+
+        res.render('mainpage', {
+            items: results,
+            user: req.session.user
+        });
     });
 });
 
@@ -117,6 +129,18 @@ app.post('/update-item', requireAuth, (req, res) => {
     });
 });
 
+app.post('/add-user', requireAuth, requireAdmin, (req, res) => {
+    const { username, password, role } = req.body;
+    const user = { username, password, role };
+    db.insert("users", "(username, password, role) VALUES (?, ?, ?)", user, (err, result) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Server error');
+            console.log(err);
+        }
+        res.redirect('/mainpage');
+    });
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

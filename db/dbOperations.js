@@ -1,9 +1,17 @@
 let db = require("./db_connections.js")
 
 const dbOperations = {
-    insert: (tableName, data, callback) => {
-        let sql_query = `INSERT INTO ${tableName} (id, name, type, serial, status, description) VALUES (?, ?, ?, ?, ?, ?)`;
-        let values = [data.id, data.name, data.type, data.serial, data.status, data.description];
+    insert: (tableName, columns, data, callback) => {
+        const colMatch = columns.match(/\((.*?)\)/);
+        const columnNames = colMatch ? colMatch[1].split(',').map(c => c.trim()) : [];
+        const values = columnNames.map(col => data[col]);
+        
+        const hasValues = columns.includes('VALUES');
+        let sql_query = hasValues 
+            ? `INSERT INTO ${tableName} ${columns}`
+            : `INSERT INTO ${tableName} ${columns} VALUES (${columnNames.map(() => '?').join(', ')})`;
+        
+        console.log("Insert debug:", { tableName, columns, data, columnNames, values, sql_query });
 
         db.query(sql_query, values, function (err, result) {
             if (callback) {
@@ -24,8 +32,12 @@ const dbOperations = {
         });
     },
     update: (tableName, data, callback) => {
-        let sql_query = `UPDATE ${tableName} SET name = ?, type = ?, serial = ?, status = ?, description = ? WHERE id = ?`;
-        let values = [data.name, data.type, data.serial, data.status, data.description, data.id];
+        const columns = Object.keys(data).filter(key => key !== 'id');
+        const setClause = columns.map(col => `${col} = ?`).join(', ');
+        const values = columns.map(col => data[col]);
+        values.push(data.id);
+        
+        let sql_query = `UPDATE ${tableName} SET ${setClause} WHERE id = ?`;
 
         db.query(sql_query, values, function (err, result) {
             if (callback) {

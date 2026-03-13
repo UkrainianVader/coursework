@@ -36,9 +36,10 @@ con.connect(function(err) {
             \`id\` int NOT NULL AUTO_INCREMENT,
             \`username\` text,
             \`password\` text,
+            \`role\` varchar(50) DEFAULT 'user',
             PRIMARY KEY (\`id\`))`);
     
-      tempCon.query(`INSERT INTO \`users\` VALUES (1,'admin','admin')`
+      tempCon.query(`INSERT INTO \`users\` (id, username, password, role) VALUES (1,'admin','admin','admin')`
         , function(err, result) {
         if (err) throw err;
         console.log("Database created or already exists");
