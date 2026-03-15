@@ -22,6 +22,7 @@
                     <th>Тип</th>
                     <th>Серійний номер</th>
                     <th>Статус</th>
+                    <th>Призначено користувачу</th>
                     <th>Опис</th>
                     <th>Дія</th>
                 </tr>
@@ -34,6 +35,7 @@
                     <td><%= item.type %></td>
                     <td><%= item.serial %></td>
                     <td><%= item.status %></td>
+                    <td><%= assignmentByEquipmentId && assignmentByEquipmentId[Number(item.id)] ? assignmentByEquipmentId[Number(item.id)] : 'Не призначено' %></td>
                     <td><%= item.description %></td>
                     <% if (user && user.role === 'admin') { %>
                     <td>

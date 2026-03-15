@@ -31,6 +31,13 @@ router.get('/mainpage', requireAuth, (req, res) => {
                     .filter((entry) => entry.date_returned === null && Number(entry.user_id) === Number(req.session.user.id))
                     .map((entry) => Number(entry.equipment_id));
 
+                const assignmentByEquipmentId = assignedEquipmentIds.reduce((acc, equipmentId) => {
+                    const assignment = usageResults.find((entry) => Number(entry.equipment_id) === equipmentId && entry.date_returned === null);
+                    acc[equipmentId] = assignment ? usersResults.find((user) => Number(user.id) === Number(assignment.user_id)).username : null;
+                    return acc;
+                }, {});
+
+
                 return res.render('mainpage', {
                     items: req.session.user.role === 'admin'
                         ? results
@@ -39,6 +46,7 @@ router.get('/mainpage', requireAuth, (req, res) => {
                             .filter((item) => item),
                     users: usersResults,
                     assignedEquipmentIds,
+                    assignmentByEquipmentId,
                     user: req.session.user
                 });
             });
