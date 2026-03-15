@@ -4,6 +4,7 @@ const express = require('express')
 const app = express()
 const session = require('express-session')
 const port = 3000
+const bcrypt = require('bcrypt');
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
@@ -19,6 +20,7 @@ app.use(session({
         maxAge: 1000 * 60 * 60 * 24 * 7
     }
 }));
+
 
 const requireAuth = (req, res, next) => {
     if (!req.session.user) {
@@ -58,18 +60,23 @@ app.post('/login', (req, res) => {
         }
 
         const matchedUser = results.find((user) => {
-            const userLogin = user.username ?? user.login;
-            const userPassword = user.password ?? user.password;
-            return userLogin === username && userPassword === password;
+            const dbUsername = user.username || user.login;
+            return dbUsername === username;
         });
 
         if (matchedUser) {
-            req.session.user = {
+            // ПОРІВНЯННЯ: введений пароль VS хеш з бази
+            const isMatch = bcrypt.compareSync(password, matchedUser.password);
+
+            if (isMatch) {
+                req.session.user = {
                 id: matchedUser.id,
                 username: matchedUser.username,
                 role: matchedUser.role
             };
             return req.session.save(() => res.redirect('/mainpage'));
+        };
+            
         }
 
         return res.status(401).send("Невірний логін або пароль");
@@ -78,7 +85,6 @@ app.post('/login', (req, res) => {
 
 app.post('/add-item', requireAuth, (req, res) => {
     const { name, type, serial, description, status } = req.body;
-    console.log(req.body);
     const item = { name, type, serial, status, description };
 
     db.insert("components", "(name, type, serial, status, description)", item, (err, result) => {
@@ -122,9 +128,6 @@ app.get("/mainpage", requireAuth, (req, res) => {
                 const userAssignedEquipmentIds = usageResults
                     .filter((entry) => entry.date_returned === null && Number(entry.user_id) === Number(req.session.user.id))
                     .map((entry) => Number(entry.equipment_id));
-                console.log("User Assigned Equipment IDs:", userAssignedEquipmentIds);
-                console.log("Assigned Equipment IDs:", assignedEquipmentIds);
-                console.log("Items: ", results);
                 res.render('mainpage', {
                     items: req.session.user.role === "admin" ? results : userAssignedEquipmentIds.map(id => results.find(item => item.id === id)).filter(item => item),
                     users: usersResults,
@@ -156,8 +159,10 @@ app.post('/update-item', requireAuth, (req, res) => {
 });
 
 app.post('/add-user', requireAuth, requireAdmin, (req, res) => {
+    const saltRounds = 10;
     const { username, password, role } = req.body;
-    const user = { username, password, role };
+    const hashedPassword = bcrypt.hashSync(password, saltRounds);
+    const user = { username, password: hashedPassword, role };
     db.insert("users", "(username, password, role) VALUES (?, ?, ?)", user, (err, result) => {
         if (err) {
             console.log(err);
