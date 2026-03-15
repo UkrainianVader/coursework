@@ -6,8 +6,11 @@
         <link rel="stylesheet" type="text/css" href="/styles.css">
     </head>
     <body id="main-page">
-
-        <h1 id="main-page-title">Список обладнання</h1>
+        <% if (user.role === 'admin' || user.role === "teacher") { %>
+            <h1 id="main-page-title">Список обладнання</h1>
+        <% } else { %>
+            <h1 id="main-page-title">Моє обладнання</h1>
+        <% } %>
         <form action="/logout" method="POST">
             <button type="submit" id="logout-button">Вийти</button>
         </form>

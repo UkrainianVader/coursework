@@ -109,7 +109,7 @@ app.get("/mainpage", requireAuth, (req, res) => {
                 return res.status(500).send("DB error");
             }
 
-            db.read("usage_history", "id, equipment_id, date_returned", (usageErr, usageResults) => {
+            db.read("usage_history", "id, equipment_id, user_id, date_returned", (usageErr, usageResults) => {
                 if (usageErr) {
                     console.error(usageErr);
                     return res.status(500).send("DB error");
@@ -118,9 +118,15 @@ app.get("/mainpage", requireAuth, (req, res) => {
                 const assignedEquipmentIds = usageResults
                     .filter((entry) => entry.date_returned === null)
                     .map((entry) => Number(entry.equipment_id));
-
+                    
+                const userAssignedEquipmentIds = usageResults
+                    .filter((entry) => entry.date_returned === null && Number(entry.user_id) === Number(req.session.user.id))
+                    .map((entry) => Number(entry.equipment_id));
+                console.log("User Assigned Equipment IDs:", userAssignedEquipmentIds);
+                console.log("Assigned Equipment IDs:", assignedEquipmentIds);
+                console.log("Items: ", results);
                 res.render('mainpage', {
-                    items: results,
+                    items: req.session.user.role === "admin" ? results : userAssignedEquipmentIds.map(id => results.find(item => item.id === id)).filter(item => item),
                     users: usersResults,
                     assignedEquipmentIds,
                     user: req.session.user
@@ -156,7 +162,6 @@ app.post('/add-user', requireAuth, requireAdmin, (req, res) => {
         if (err) {
             console.log(err);
             return res.status(500).send('Server error');
-            console.log(err);
         }
         res.redirect('/mainpage');
     });
