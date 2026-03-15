@@ -12,7 +12,7 @@ router.get('/warehouse-report', requireAuth, requireAdmin, (req, res) => {
         res.render('warehouseReport', { 
             totalEquipment: equipment.length,
             damagedEquipment: equipment.filter(c => c.status === 'ремонт').length,
-            assignedEquipment: equipment.filter(c => c.status === 'видано').length,
+            assignedEquipment: equipment.filter(c => c.status === 'призначене').length,
             freeEquipment: equipment.filter(c => c.status === 'вільне').length,
             equipment,
             user: req.session.user });

@@ -29,6 +29,12 @@ router.post('/assign-item', requireAuth, requireAdmin, (req, res) => {
             }
             return res.redirect('/mainpage');
         });
+        db.update('components', { id, status: 'призначене' }, (updateErr) => {
+            if (updateErr) {
+                console.error(updateErr);
+                return res.status(500).send('Server error');
+            }
+        });
     });
 });
 
@@ -55,7 +61,13 @@ router.post('/unassign-item', requireAuth, requireAdmin, (req, res) => {
                 console.error(updateErr);
                 return res.status(500).send('Server error');
             }
-            return res.redirect('/mainpage');
+            db.update('components', { id, status: 'вільне' }, (componentErr) => {
+                if (componentErr) {
+                    console.error(componentErr);
+                    return res.status(500).send('Server error');
+                }
+                return res.redirect('/mainpage');
+            });
         });
     });
 });
