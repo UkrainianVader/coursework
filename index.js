@@ -5,6 +5,7 @@ const mainRoutes = require('./routes/mainRoutes');
 const componentsRoutes = require('./routes/componentsRoutes');
 const assignmentsRoutes = require('./routes/assignmentsRoutes');
 const usersRoutes = require('./routes/usersRoutes');
+const reportRoutes = require('./routes/reportRoutes');
 
 const app = express();
 const port = 3000;
@@ -29,6 +30,7 @@ app.use('/', mainRoutes);
 app.use('/', componentsRoutes);
 app.use('/', assignmentsRoutes);
 app.use('/', usersRoutes);
+app.use('/', reportRoutes);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
