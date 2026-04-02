@@ -28,6 +28,16 @@ router.post('/update-item', requireAuth, (req, res) => {
     });
 });
 
+router.post('/fix-item', requireAuth, (req, res) => {
+    const { id } = req.body;
+    db.update('components', { id, status: 'вільне' }, (err) => {
+        if (err) {
+            return res.status(500).send('Server error');
+        }
+        return res.redirect('/');
+    });
+});
+
 router.post('/remove', requireAuth, (req, res) => {
     const { id } = req.body;
     db.remove('components', 'id', { id }, (err) => {
