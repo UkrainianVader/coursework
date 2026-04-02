@@ -118,3 +118,21 @@ form[action="/login"] input {
 .admin-tab-content.active {
     display: block;
 }
+
+#warehouseReportModal {
+    width: min(1100px, 92vw);
+    max-height: 85vh;
+    overflow: auto;
+}
+
+#warehouseReportModal #warehouse-report-table {
+    width: 100%;
+    color: #111;
+    border-collapse: collapse;
+}
+
+#warehouseReportModal #warehouse-report-table th,
+#warehouseReportModal #warehouse-report-table td {
+    border: 1px solid #bcbcbc;
+    padding: 6px 8px;
+}

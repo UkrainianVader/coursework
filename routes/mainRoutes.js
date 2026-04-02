@@ -43,6 +43,16 @@ router.get('/mainpage', requireAuth, (req, res) => {
                     return acc;
                 }, {});
 
+                const warehouseReport = req.session.user.role === 'admin'
+                    ? {
+                        totalEquipment: results.length,
+                        damagedEquipment: results.filter((c) => c.status === 'ремонт').length,
+                        assignedEquipment: results.filter((c) => c.status === 'призначене').length,
+                        freeEquipment: results.filter((c) => c.status === 'вільне').length,
+                        equipment: results
+                    }
+                    : null;
+
 
                 return res.render('mainpage', {
                     items: req.session.user.role === 'admin'
@@ -53,6 +63,7 @@ router.get('/mainpage', requireAuth, (req, res) => {
                     users: usersResults,
                     assignedEquipmentIds,
                     assignmentByEquipmentId,
+                    warehouseReport,
                     user: req.session.user
                 });
             });

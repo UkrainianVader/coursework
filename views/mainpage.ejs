@@ -44,9 +44,7 @@
                     data-description>
                     Додати обладнання
                 </button>
-                <form action="/warehouse-report">
-                    <button type="submit">Звіт складу</button>
-                </form>
+                <button type="button" class="open-warehouse-report-modal">Звіт складу</button>
             </div>
 
             <div class="admin-tab-content" id="admin-tab-db">
@@ -210,9 +208,7 @@
                 Додати обладнання
             </button>
             <!-- <button id="create-user-button">Створити користувача</button> -->
-            <form action="/warehouse-report">
-                <button type="submit">Звіт складу</button>
-            </form>
+            <button type="button" class="open-warehouse-report-modal">Звіт складу</button>
         <% } %>
 
         <dialog id="addUserModal">
@@ -242,6 +238,42 @@
             </form>
         </dialog>
 
+        <dialog id="warehouseReportModal">
+            <h3>Звіт складу</h3>
+            <p>Загальна кількість обладнання: <%= warehouseReport ? warehouseReport.totalEquipment : 0 %></p>
+            <p>Вільне обладнання: <%= warehouseReport ? warehouseReport.freeEquipment : 0 %></p>
+            <p>Призначене обладнання: <%= warehouseReport ? warehouseReport.assignedEquipment : 0 %></p>
+            <p>Пошкоджене обладнання: <%= warehouseReport ? warehouseReport.damagedEquipment : 0 %></p>
+
+            <table id="warehouse-report-table" border="1">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Назва</th>
+                        <th>Тип</th>
+                        <th>Серійний номер</th>
+                        <th>Статус</th>
+                        <th>Опис</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (warehouseReport && warehouseReport.equipment) { %>
+                        <% warehouseReport.equipment.forEach((item) => { %>
+                            <tr>
+                                <td><%= item.id %></td>
+                                <td><%= item.name %></td>
+                                <td><%= item.type %></td>
+                                <td><%= item.serial %></td>
+                                <td><%= item.status %></td>
+                                <td><%= item.description %></td>
+                            </tr>
+                        <% }); %>
+                    <% } %>
+                </tbody>
+            </table>
+            <button type="button" id="warehouseReportCloseBtn">Скасувати</button>
+        </dialog>
+
 
     </body>
     <script>
@@ -252,6 +284,7 @@
         const adminPanelButton = document.getElementById('admin-panel-button');
         const adminModal = document.getElementById('adminModal');
         const deleteUserModal = document.getElementById('delUserModal');
+        const warehouseReportModal = document.getElementById('warehouseReportModal');
 
         const closeBtn = document.getElementById('closeBtn');
         const addCloseBtn = document.getElementById('addCloseBtn');
@@ -259,6 +292,7 @@
         const assignCloseBtn = document.getElementById('assignCloseBtn');
         const adminCloseBtn = document.getElementById('adminCloseBtn');
         const deleteUserCloseBtn = document.getElementById('delUserCloseBtn');
+        const warehouseReportCloseBtn = document.getElementById('warehouseReportCloseBtn');
         
         const inputId = document.getElementById('modalId');
         const inputName = document.getElementById('modalName');
@@ -289,6 +323,12 @@
         if (adminCloseBtn && adminModal) {
             adminCloseBtn.addEventListener('click', () => {
                 adminModal.close();
+            });
+        }
+
+        if (warehouseReportCloseBtn && warehouseReportModal) {
+            warehouseReportCloseBtn.addEventListener('click', () => {
+                warehouseReportModal.close();
             });
         }
 
@@ -376,6 +416,9 @@
                 deleteUserCloseBtn.addEventListener('click', () => {
                     deleteUserModal.close();
                 });
+            }
+            else if (e.target.classList.contains('open-warehouse-report-modal')) {
+                warehouseReportModal.showModal();
             }
         });
 
