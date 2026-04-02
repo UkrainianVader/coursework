@@ -28,6 +28,10 @@ router.post('/delete-user', requireAuth, requireAdmin, (req, res) => {
         return res.status(400).send('Invalid user id');
     }
 
+    if (userId === 1) {
+        return res.status(400).send('Ви не можете видалити адміністратора за замовчуванням!');
+    }
+
     db.remove('users', 'id', { id: userId }, (err) => {
         if (err) {
             console.log(err);
