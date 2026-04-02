@@ -11,9 +11,43 @@
         <% } else { %>
             <h1 id="main-page-title">Моє обладнання</h1>
         <% } %>
+
         <form action="/logout" method="POST">
             <button type="submit" id="logout-button">Вийти</button>
         </form>
+
+        <% if (user && user.role === 'admin') { %>
+            <button id="admin-panel-button">Панель адміністрування</button>
+        <% } %>
+
+        <dialog id="adminModal">
+            <!-- <form action="/add-user" method="POST">
+                <input type="text" name="username" id="modalUsername" placeholder="Логін">
+                <input type="password" name="password" id="modalPassword" placeholder="Пароль">
+                <select name="role" id="modalRole">
+                    <option value="user">Користувач</option>
+                    <option value="admin">Адміністратор</option>
+                    <option value="teacher">Викладач</option>
+                </select>
+                <button type="button" id="addUserCloseBtn">Скасувати</button>
+                <button type="submit">Створити користувача</button>
+            </form> -->
+            <!-- <button class="add-btn"
+                data-id
+                data-name
+                data-type
+                data-serial
+                data-status
+                data-description>
+                Додати обладнання
+            </button> -->
+            <button id="create-user-button">Створити користувача</button>
+            <!-- <form action="/warehouse-report">
+                <button type="submit">Звіт складу</button>
+            </form> -->
+            <button type="button" id="adminCloseBtn">Закрити</button>
+        </dialog>
+
 
         <table border="1"> <thead>
                 <tr>
@@ -156,7 +190,7 @@
                 data-description>
                 Додати обладнання
             </button>
-            <button id="create-user-button">Створити користувача</button>
+            <!-- <button id="create-user-button">Створити користувача</button> -->
             <form action="/warehouse-report">
                 <button type="submit">Звіт складу</button>
             </form>
@@ -182,11 +216,14 @@
         const addModal = document.getElementById('addModal');
         const addUserModal = document.getElementById('addUserModal');
         const assignModal = document.getElementById('assignModal');
+        const adminPanelButton = document.getElementById('admin-panel-button');
+        const adminModal = document.getElementById('adminModal');
 
         const closeBtn = document.getElementById('closeBtn');
         const addCloseBtn = document.getElementById('addCloseBtn');
         const addUserCloseBtn = document.getElementById('addUserCloseBtn');
         const assignCloseBtn = document.getElementById('assignCloseBtn');
+        const adminCloseBtn = document.getElementById('adminCloseBtn');
         
         const inputId = document.getElementById('modalId');
         const inputName = document.getElementById('modalName');
@@ -201,6 +238,12 @@
         
         const assignModalId = document.getElementById('assignModalId');
         const assignModalUser = document.getElementById('assignModalUser');
+
+        if (adminCloseBtn && adminModal) {
+            adminCloseBtn.addEventListener('click', () => {
+                adminModal.close();
+            });
+        }
 
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('edit-btn')) {
@@ -272,6 +315,9 @@
                         assignModal.close();
                     });
                 }
+            else if (e.target.id === 'admin-panel-button') {
+                adminModal.showModal();
+            }
         });
 
 </script>
