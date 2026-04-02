@@ -36,6 +36,7 @@ const ensureUsageHistoryTable = (callback) => {
   con.query(`CREATE TABLE IF NOT EXISTS \`usage_history\` (
     \`id\` int NOT NULL AUTO_INCREMENT,
     \`user_id\` int DEFAULT NULL,
+    \`username\` text,
     \`equipment_id\` int NOT NULL,
     \`date_taken\` datetime DEFAULT CURRENT_TIMESTAMP,
     \`date_returned\` datetime DEFAULT NULL,

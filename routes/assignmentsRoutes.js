@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post('/assign-item', requireAuth, requireAdmin, (req, res) => {
     const { id, userId } = req.body;
-    db.read('users', 'id, role', (usersErr, usersRows) => {
+    db.read('users', 'id, username, role', (usersErr, usersRows) => {
         if (usersErr) {
             console.error(usersErr);
             return res.status(500).send('Server error');
@@ -21,8 +21,13 @@ router.post('/assign-item', requireAuth, requireAdmin, (req, res) => {
             return res.status(400).send('Cannot assign component to admin user');
         }
 
-        const usageEntry = { equipment_id: id, user_id: userId };
-        db.insert('usage_history', '(equipment_id, user_id)', usageEntry, (err) => {
+        const usageEntry = {
+            equipment_id: id,
+            user_id: userId,
+            username: selectedUser.username
+        };
+
+        db.insert('usage_history', '(equipment_id, user_id, username)', usageEntry, (err) => {
             if (err) {
                 console.error(err);
                 return res.status(500).send('Server error');

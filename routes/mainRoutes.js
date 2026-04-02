@@ -17,7 +17,7 @@ router.get('/mainpage', requireAuth, (req, res) => {
                 return res.status(500).send('DB error');
             }
 
-            db.read('usage_history', 'id, equipment_id, user_id, date_returned', (usageErr, usageResults) => {
+            db.read('usage_history', 'id, equipment_id, user_id, username, date_returned', (usageErr, usageResults) => {
                 if (usageErr) {
                     console.error(usageErr);
                     return res.status(500).send('DB error');
@@ -33,7 +33,13 @@ router.get('/mainpage', requireAuth, (req, res) => {
 
                 const assignmentByEquipmentId = assignedEquipmentIds.reduce((acc, equipmentId) => {
                     const assignment = usageResults.find((entry) => Number(entry.equipment_id) === equipmentId && entry.date_returned === null);
-                    acc[equipmentId] = assignment ? usersResults.find((user) => Number(user.id) === Number(assignment.user_id)).username : null;
+                    if (!assignment) {
+                        acc[equipmentId] = null;
+                        return acc;
+                    }
+
+                    const matchedUser = usersResults.find((user) => Number(user.id) === Number(assignment.user_id));
+                    acc[equipmentId] = matchedUser ? matchedUser.username : (assignment.username || 'Видалений користувач');
                     return acc;
                 }, {});
 
