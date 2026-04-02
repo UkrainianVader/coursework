@@ -83,3 +83,38 @@ form[action="/login"] input {
     border-radius: 4px;
     cursor: pointer;
 }
+
+#adminModal {
+    min-width: 540px;
+}
+
+.admin-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #c7c7c7;
+    padding-bottom: 8px;
+}
+
+.admin-tab-button {
+    border: 1px solid #999;
+    background-color: #f0f0f0;
+    color: #111;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+.admin-tab-button.active {
+    background-color: #333;
+    color: #fff;
+    border-color: #333;
+}
+
+.admin-tab-content {
+    display: none;
+    margin-bottom: 12px;
+}
+
+.admin-tab-content.active {
+    display: block;
+}
