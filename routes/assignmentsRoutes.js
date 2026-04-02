@@ -4,6 +4,47 @@ const { requireAuth, requireAdmin } = require('../middleware/auth');
 
 const router = express.Router();
 
+const returnAssignedItemForCurrentUser = (req, res, statusAfterReturn) => {
+    const componentId = Number(req.body.id);
+    const currentUserId = Number(req.session.user.id);
+
+    if (!Number.isInteger(componentId) || componentId <= 0) {
+        return res.status(400).send('Invalid component id');
+    }
+
+    db.read('usage_history', 'id, equipment_id, user_id, date_returned', (err, usageRows) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Server error');
+        }
+
+        const activeAssignment = usageRows
+            .filter((row) => Number(row.equipment_id) === componentId && row.date_returned === null)
+            .sort((a, b) => b.id - a.id)
+            .find((row) => Number(row.user_id) === currentUserId);
+
+        if (!activeAssignment) {
+            return res.status(403).send('Component is not assigned to current user');
+        }
+
+        db.update('usage_history', { id: activeAssignment.id, date_returned: new Date() }, (updateErr) => {
+            if (updateErr) {
+                console.error(updateErr);
+                return res.status(500).send('Server error');
+            }
+
+            db.update('components', { id: componentId, status: statusAfterReturn }, (componentErr) => {
+                if (componentErr) {
+                    console.error(componentErr);
+                    return res.status(500).send('Server error');
+                }
+
+                return res.redirect('/mainpage');
+            });
+        });
+    });
+};
+
 router.post('/assign-item', requireAuth, requireAdmin, (req, res) => {
     const { id, userId } = req.body;
     db.read('users', 'id, username, role', (usersErr, usersRows) => {
@@ -75,6 +116,14 @@ router.post('/unassign-item', requireAuth, requireAdmin, (req, res) => {
             });
         });
     });
+});
+
+router.post('/return-item', requireAuth, (req, res) => {
+    returnAssignedItemForCurrentUser(req, res, 'вільне');
+});
+
+router.post('/return-item-broken', requireAuth, (req, res) => {
+    returnAssignedItemForCurrentUser(req, res, 'ремонт');
 });
 
 module.exports = router;
